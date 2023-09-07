@@ -5,6 +5,7 @@
 Proyecto que sirve de base para aplicaciones futuras. Estas son algunas características:
 
 - [Formateo de Código](https://github.com/FriendsOfPHP/PHP-CS-Fixer).
+- [Analizador de Código](https://github.com/nunomaduro/larastan).
 
 ## Learning Laravel
 
