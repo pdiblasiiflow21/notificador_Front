@@ -7,6 +7,7 @@ Proyecto que sirve de base para aplicaciones futuras. Estas son algunas caracter
 - [Formateo de Código](https://github.com/FriendsOfPHP/PHP-CS-Fixer).
 - [Analizador de Código](https://github.com/nunomaduro/larastan).
 - [Visualización de logs](https://github.com/opcodesio/log-viewer).
+- [Telescope](https://github.com/laravel/telescope).
 
 ## Learning Laravel
 
