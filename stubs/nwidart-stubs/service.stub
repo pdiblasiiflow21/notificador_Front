@@ -1,0 +1,17 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Modules\$STUDLY_NAME$\Services\V1;
+
+use Modules\$STUDLY_NAME$\Repositories\V1\$STUDLY_NAME$Repository;
+
+class $STUDLY_NAME$Service
+{
+    protected $repository;
+
+    public function __construct($STUDLY_NAME$Repository $repository)
+    {
+        $this->repository = $repository;
+    }
+}

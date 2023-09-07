@@ -1,0 +1,16 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Modules\$STUDLY_NAME$\Repositories\V1;
+
+use App\Repository\EloquentRepository;
+use Modules\$STUDLY_NAME$\Entities\$STUDLY_NAME$;
+
+class $STUDLY_NAME$Repository extends EloquentRepository
+{
+    public function __construct()
+    {
+        parent::__construct(new $STUDLY_NAME$());
+    }
+}
