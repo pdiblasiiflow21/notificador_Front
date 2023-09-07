@@ -8,6 +8,7 @@ Proyecto que sirve de base para aplicaciones futuras. Estas son algunas caracter
 - [Analizador de Código](https://github.com/nunomaduro/larastan).
 - [Visualización de logs](https://github.com/opcodesio/log-viewer).
 - [Telescope](https://github.com/laravel/telescope).
+- [Documentación con swagger](https://github.com/DarkaOnLine/L5-Swagger).
 
 ## Learning Laravel
 
@@ -19,4 +20,8 @@ Se recomienda hacer el [Bootcamp de Laravel](https://bootcamp.laravel.com).
 ```sh
 chmod 777 -R storage
 chmod 777 -R config
+```
+### Regenerar documentacion
+```sh
+php artisan l5-swagger:generate
 ```
