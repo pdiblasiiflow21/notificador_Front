@@ -190,4 +190,17 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    'iflow' => [
+        'host'                     => env('IFLOW_HOST'),
+        'login_method'             => 'login',
+        'order_state_method'       => 'order/state',
+        'get_seller_orders_method' => 'client/shipping/?limit=2000',
+        'cookie_value'             => 'Cookie_1=value; SERVERID=api_iflow21_n2',
+    ],
+    'newsan' => [
+        'host'                => env('NEWSAN_HOST'),
+        'key'                 => env('NEWSAN_KEY'),
+        'user'                => env('NEWSAN_USER'),
+        'notification_method' => 'notification',
+    ],
 ];

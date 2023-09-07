@@ -128,6 +128,11 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+        'api_iflow' => [
+            'driver' => 'single',
+            'path'   => storage_path('logs/api_iflow/iflow.log'),
+            'level'  => env('LOG_LEVEL', 'debug'),
+        ],
     ],
 
 ];
