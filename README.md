@@ -9,6 +9,7 @@ Proyecto que sirve de base para aplicaciones futuras. Estas son algunas caracter
 - [Visualización de logs](https://github.com/opcodesio/log-viewer).
 - [Telescope](https://github.com/laravel/telescope).
 - [Documentación con swagger](https://github.com/DarkaOnLine/L5-Swagger).
+- [Modularización de código](https://docs.laravelmodules.com/v10/introduction).
 
 ## Learning Laravel
 
