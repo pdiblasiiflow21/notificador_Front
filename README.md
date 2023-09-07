@@ -6,9 +6,16 @@ Proyecto que sirve de base para aplicaciones futuras. Estas son algunas caracter
 
 - [Formateo de Código](https://github.com/FriendsOfPHP/PHP-CS-Fixer).
 - [Analizador de Código](https://github.com/nunomaduro/larastan).
+- [Visualización de logs](https://github.com/opcodesio/log-viewer).
 
 ## Learning Laravel
 
 Laravel tiene una gran [documentation](https://laravel.com/docs) para iniciar con el framework.
 
 Se recomienda hacer el [Bootcamp de Laravel](https://bootcamp.laravel.com).
+
+### Brindar permisos al directorio storage dentro del laravel.test-1
+```sh
+chmod 777 -R storage
+chmod 777 -R config
+```
