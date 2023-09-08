@@ -18,3 +18,5 @@ yarn-error.log
 /.idea
 /.vscode
 .php-cs-fixer.cache
+storage/api-docs/api-docs.json
+storage/api-docs/api-docs.yaml

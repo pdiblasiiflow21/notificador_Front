@@ -74,7 +74,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'America/Argentina/Buenos_Aires',
 
     /*
     |--------------------------------------------------------------------------
@@ -194,7 +194,7 @@ return [
         'host'                     => env('IFLOW_HOST'),
         'login_method'             => 'login',
         'order_state_method'       => 'order/state',
-        'get_seller_orders_method' => 'client/shipping/?limit=2000',
+        'get_seller_orders_method' => 'v1/client/shipping/',
         'cookie_value'             => 'Cookie_1=value; SERVERID=api_iflow21_n2',
     ],
     'newsan' => [

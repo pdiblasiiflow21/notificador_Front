@@ -1,0 +1,11 @@
+{
+    "name": "NewSan",
+    "alias": "newsan",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\NewSan\\Providers\\NewSanServiceProvider"
+    ],
+    "files": []
+}
