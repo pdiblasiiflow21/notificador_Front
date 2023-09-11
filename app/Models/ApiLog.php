@@ -13,6 +13,7 @@ class ApiLog extends Model
 
     protected $fillable = [
         'request_endpoint',
+        'request_method',
         'request_credentials',
         'response_status_code',
         'response',

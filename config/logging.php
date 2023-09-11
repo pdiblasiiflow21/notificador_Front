@@ -130,8 +130,23 @@ return [
         ],
         'api_iflow' => [
             'driver' => 'single',
-            'path'   => storage_path('logs/api_iflow/iflow.log'),
+            'path'   => storage_path('logs/apis/iflow.log'),
             'level'  => env('LOG_LEVEL', 'debug'),
+        ],
+        'api_newsan' => [
+            'driver' => 'single',
+            'path'   => storage_path('logs/apis/newsan.log'),
+            'level'  => env('LOG_LEVEL', 'debug'),
+        ],
+        'new_san_orders' => [
+            'driver' => 'single',
+            'path'   => storage_path('logs/new_san_orders.log'),
+            'level'  => 'debug',
+        ],
+        'new_san_orders_informed' => [
+            'driver' => 'single',
+            'path'   => storage_path('logs/new_san_orders_informed.log'),
+            'level'  => 'debug',
         ],
     ],
 

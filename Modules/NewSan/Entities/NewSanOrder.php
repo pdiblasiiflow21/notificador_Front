@@ -2,25 +2,30 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace Modules\NewSan\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class OrderStatus extends Model
+class NewSanOrder extends Model
 {
     use HasFactory;
 
+    protected $table = 'NewSan_orders';
+
+    protected $primaryKey = 'api_id';
+
+    public const NO_FINALIZADO = 0;
+
+    public const FINALIZADO = 1;
+
     protected $fillable = [
-        'id',
+        'api_id',
         'order_id',
         'shipment_id',
         'tracking_id',
         'state',
-        'state_class',
-        'items',
-        'sender',
-        'receiver',
-        'value',
+        'date',
+        'finalized',
     ];
 }

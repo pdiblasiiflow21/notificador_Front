@@ -15,10 +15,11 @@ return new class() extends Migration {
         Schema::create($this->tableName, function (Blueprint $table) {
             $table->id();
             $table->string('request_endpoint');
+            $table->string('request_method');
             $table->text('request_credentials')->nullable();
             $table->string('response_status_code');
             $table->longText('response')->nullable();
-            $table->double('response_time', 8, 2)->nullable();
+            $table->double('response_time', 15, 8)->nullable()->comment('Tiempo de respuesta en microseconds');
             $table->timestamps();
         });
 

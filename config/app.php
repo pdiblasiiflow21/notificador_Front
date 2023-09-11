@@ -201,6 +201,6 @@ return [
         'host'                => env('NEWSAN_HOST'),
         'key'                 => env('NEWSAN_KEY'),
         'user'                => env('NEWSAN_USER'),
-        'notification_method' => 'notification',
+        'notification_method' => 'notifications',
     ],
 ];

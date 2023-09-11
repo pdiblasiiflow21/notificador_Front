@@ -1,7 +1,7 @@
 @hostname=localhost
 @port=8002
 @api_version=api/v1
-@token=eyJhbGciOiJSUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0NVU1RPTUVSIiwiUk9MRV9BUElfQ0xJRU5UIiwiUk9MRV9BUElfQ0xJRU5UX0NBTkNFTF9PUkRFUiIsIlJPTEVfQVBJX0NMSUVOVF9DQU5DRUxfU0hJUFBJTkciLCJST0xFX0FQSV9DTElFTlRfTUVSQ0hBTlRfT1JERVJfQUREIiwiUk9MRV9BUElfQ0xJRU5UX1NISVBQSU5HX1JFVFVSTiIsIlJPTEVfQVBJX0NMSUVOVF9TSElQUElOR19CQVRDSF9QUklOVElORyIsIlJPTEVfQVBJIl0sInVzZXJuYW1lIjoibmV3c2FucHJvZCIsInRlcm1zX2FjY2VwdGVkIjp0cnVlLCJwcmVwYWdvIjpmYWxzZSwibG9naXN0aWNhX2ludmVyc2EiOmZhbHNlLCJkZWZhdWx0X2Zvcm1hdCI6InBkZiIsInVzZXJfdHlwZSI6IkNsaWVudCIsImlhdCI6MTY5NDE4MjYzMywiZXhwIjoxNjk0MTg2MjMzfQ.mxmygi6fdQdUuqbSDywL3slHhZLgFz9V-h4AbgUKHCZ0WMAnofuaoH7FamO6X2RwYjftlD2viEaQFIQIcyVSj3Q6hXks32g7-0d1L2Aje0kJgFH2sR0Hho8YfeNv_-fRnAhlg7uS_su4bt-0nDbC65573jVWyiMtfZaiLZokYwoAcPvxXQoWT_-sry74KkU1rPJdr674PJe6npB66SRO-sJF4D-fw7M9NKkU8E0H0DFJUTg-od67wBIAkxD5uhxh0VJpXv_xnonpqj-PUhjnRwLJ4jvlvFxGmzQG7ba9X_3NoPbiFTLw0-vtWC20zQSmYE-EFcYYtSP-STswNxTru1mmI5dqwu7Xvy_n-2h6rsVc68oDkGvLc9ZLc9ZhF3b9di2Z9cS1o2SV1zNt9T3GXt-KU1kDP4N-RuKFX0nkoazgw9sLD7zV9Qvkqdejyke0dtHXqUk0VjoekLmV1jOSRSfc0zyNW4O0H6tDtT1ETnYg04oNssdsd2Hj19czl-XqtS23AThEQ5Zh-03o0JGgTxI3NtIRs96rufz86bdOdoLB223OGSv7shqvhwRvCbGz5JjD9k2eTGVMIDBXZBFz2WzPXc4CHuqwFHCW3dACRDxWZ9BVaYzOTrxPcaOUQxvaB-d7SxFpXpYI7tYSq9xFuIV5gyvX_Sok0bPLhRVKgTw
+@token=eyJhbGciOiJSUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0NVU1RPTUVSIiwiUk9MRV9BUElfQ0xJRU5UIiwiUk9MRV9BUElfQ0xJRU5UX0NBTkNFTF9PUkRFUiIsIlJPTEVfQVBJX0NMSUVOVF9DQU5DRUxfU0hJUFBJTkciLCJST0xFX0FQSV9DTElFTlRfTUVSQ0hBTlRfT1JERVJfQUREIiwiUk9MRV9BUElfQ0xJRU5UX1NISVBQSU5HX1JFVFVSTiIsIlJPTEVfQVBJX0NMSUVOVF9TSElQUElOR19CQVRDSF9QUklOVElORyIsIlJPTEVfQVBJIl0sInVzZXJuYW1lIjoibmV3c2FucHJvZCIsInRlcm1zX2FjY2VwdGVkIjp0cnVlLCJwcmVwYWdvIjpmYWxzZSwibG9naXN0aWNhX2ludmVyc2EiOmZhbHNlLCJkZWZhdWx0X2Zvcm1hdCI6InBkZiIsInVzZXJfdHlwZSI6IkNsaWVudCIsImlhdCI6MTY5NDM5OTk3OCwiZXhwIjoxNjk0NDAzNTc4fQ.bjqfJiIycglwdKumh-834o2Z4MWlspBeU9tnKE3_hg6PsD5fQgfke2-_99Y0QFeJdsshj65q7rsoOHDe8nx4QU_G7PVxM4iykNRIsXgBYkeWbI83qdH_Q2zZjfiVu1WxC_WnsHgV2Iu2z8QN6FXRXFXk8IPZwT31BQ_xBMSy7kp446Go-Rq67jJXRbvvY_H2QfLlGGne2G1n_e-6PUofVW3hzFcACmTeGZubAbe_cagestmo7lx9WZtZY8MV5lxabiFn1REuM0m76CrP6C6ECU_j5yO9nnR9PBLP-31bEmjbn7Y9ayx-aUO-uXe7EnOSUDnNMeueUk56i3PGGPIAdu35jCS77wluakmA00Q1h5d-kiNqmN9hC5_ZUtAZ_iyCygB6t2Y-_V6sK54qIVwgwXOdwqXPkBV59pVjnwDhdxINKFfm6fHkMAB-1djs9SdQxLwr3vkoyQ5hhpoEiudLJrEAf4TBeS2OCduPmFU99cPsHB3By_uD5xPlEavMM5TaH7bjciAJApfntnju6nn0T74Hf4qlixJKXwCpacsG5Q04yMc4uLiik0iUp7nbJqmGhg57Csrh_q_u5DtbVj-DNWqduaBs_cve8sttykDH9Z0pVrVH4V5yhPmpvMU5N-PmEpUHtvEKfHrG9_ctesdAHdysTZvlA_ztzBO6MU8sXIk
 
 ### getToken
 POST http://{{hostname}}:{{port}}/{{api_version}}/iflow/token HTTP/1.1
@@ -13,11 +13,21 @@ Content-Type: application/json
 }
 
 ### getStatusOrder
-GET http://{{hostname}}:{{port}}/{{api_version}}/iflow/get-status/OR0022302053 HTTP/1.1
+GET http://{{hostname}}:{{port}}/{{api_version}}/iflow/get-status-order/OR0022306264 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ### getSellerOrders
-GET http://{{hostname}}:{{port}}/{{api_version}}/iflow/get-seller-orders/?page=1&limit=100 HTTP/1.1
+GET http://{{hostname}}:{{port}}/{{api_version}}/iflow/get-seller-orders/?page=1&limit=1 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
+
+### Notify Orders
+GET http://{{hostname}}:{{port}}/{{api_version}}/newsan/notify-orders HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "pages": 1,
+    "limit": 3
+}

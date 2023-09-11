@@ -16,8 +16,6 @@ use Modules\NewSan\Http\Controllers\V1\NewSanController;
 |
 */
 
-Route::prefix('v1')->group(function () {
-    Route::post('/iflow/token', [NewSanController::class, 'getToken'])->name('v1.iflow.getToken');
-    Route::get('/iflow/get-status/{trackId}', [NewSanController::class, 'getStatusOrder'])->name('v1.iflow.getStatusOrder');
-    Route::get('/iflow/get-seller-orders', [NewSanController::class, 'getSellerOrders'])->name('v1.iflow.getSellerOrders');
+Route::prefix('v1/newsan')->group(function () {
+    Route::get('notify-orders', [NewSanController::class, 'notifyOrders'])->name('v1.newsan.notifyOrders');
 });

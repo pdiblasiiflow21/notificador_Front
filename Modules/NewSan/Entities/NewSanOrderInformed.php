@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace Modules\NewSan\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * @OA\Schema(
- *      schema="Order",
+ *      schema="NewSanOrderInformed",
  *      required={"id", "order_id", "shipment_id", "tracking_id", "state", "state_class", "items", "sender", "receiver", "value"},
  *      @OA\Property(
  *          property="id",
@@ -56,20 +56,41 @@ use Illuminate\Database\Eloquent\Model;
  *      )
  * )
  */
-class Order extends Model
+class NewSanOrderInformed extends Model
 {
     use HasFactory;
 
+    protected $table = 'NewSan_orders_informed';
+
+    protected $primaryKey = 'api_id';
+
+    public const REGISTRADO = 'Registrado';
+
+    public const DESCARGADO = 'Descargado';
+
+    public const DESPACHADO = 'Despachado a Nodo Interno';
+
+    public const ARRIBADO = 'Arribo a Nodo';
+
+    public const PACTADO = 'Pactado';
+
+    public const PEDIDO = 'Pedido en Distribución';
+
+    public const ENTREGADO = 'Entregado';
+
     protected $fillable = [
-        'id',
+        'api_id',
         'order_id',
         'shipment_id',
         'tracking_id',
-        'state',
-        'state_class',
-        'items',
-        'sender',
-        'receiver',
-        'value',
+        'state_id',
+        'state_name',
+        'message',
+        'state_date',
+        'informed',
+    ];
+
+    protected $casts = [
+        'informed' => 'boolean',
     ];
 }
