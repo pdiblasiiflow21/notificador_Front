@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class NotifyOrdersNewSan implements ShouldQueue
 {
@@ -40,6 +41,10 @@ class NotifyOrdersNewSan implements ShouldQueue
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer '.$token,
             ])->get(route('v1.newsan.notifyOrders'));
+
+            Log::channel('api_newsan')->info('Respuesta de la API en el schedule:', [
+                'response' => $response->json(),
+            ]);
 
             if ($response->successful()) {
                 // Manejar la respuesta

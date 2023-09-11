@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Iniciar el servicio de cron
+cron
+
 if [ ! -z "$WWWUSER" ]; then
     usermod -u $WWWUSER sail
 fi
