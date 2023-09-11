@@ -11,8 +11,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Http\Request;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Modules\NewSan\Services\V1\NewSanService;
 
 class NotifyOrdersNewSan implements ShouldQueue
 {
@@ -25,8 +25,10 @@ class NotifyOrdersNewSan implements ShouldQueue
     {
     }
 
-    public function handle(IflowApiService $iflowApiService): void
-    {
+    public function handle(
+        IflowApiService $iflowApiService,
+        NewSanService $newSanService
+    ): void {
         $request = new Request();
         $request->merge([
             'username' => config('app.iflow.username'),
@@ -35,21 +37,24 @@ class NotifyOrdersNewSan implements ShouldQueue
 
         // Obtener el token usando el servicio
         $token = $iflowApiService->getToken($request);
+        Log::channel('api_newsan')->info('Respuesta de la API iflow en el schedule token: '.$token);
 
         if ($token) {
-            // Llamar al endpoint dentro de tu sistema
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer '.$token,
-            ])->get(route('v1.newsan.notifyOrders'));
+            try {
+                request()->headers->set('Authorization', 'Bearer '.$token);
 
-            Log::channel('api_newsan')->info('Respuesta de la API en el schedule:', [
-                'response' => $response->json(),
-            ]);
+                // Usa el método del servicio NewSanService para notificar los pedidos
+                $successfulNotifications = $newSanService->notifyOrders(request());
 
-            if ($response->successful()) {
-                // Manejar la respuesta
+                Log::channel('api_newsan')->info('Notificaciones exitosas:', [
+                    'successfulNotifications' => $successfulNotifications,
+                ]);
+            } catch (\Exception $e) {
+                // Manejar el error
+                Log::channel('api_newsan')->error('Error en la API:', [
+                    'error' => $e->getMessage(),
+                ]);
             }
-            // Manejar el error
         }
     }
 }

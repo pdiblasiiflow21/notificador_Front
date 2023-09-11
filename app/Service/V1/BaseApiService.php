@@ -36,7 +36,7 @@ class BaseApiService
      * @throws \Exception Si ocurre otro error.
      * @return mixed El resultado devuelto por la llamada API.
      */
-    protected function executeApiCall(callable $callback, string $channelLogName)
+    protected function executeApiCall(callable $callback, string $channelLogName, string $method)
     {
         try {
             return $callback();
@@ -47,7 +47,7 @@ class BaseApiService
 
             if ($statusCode === Response::HTTP_UNAUTHORIZED) {
                 $message = 'Token vencido. Unauthorized';
-                Log::channel($channelLogName)->error($message);
+                Log::channel($channelLogName)->error($method.' : '.$message);
 
                 throw new TokenVencidoException($message);
             }

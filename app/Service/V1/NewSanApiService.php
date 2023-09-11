@@ -35,6 +35,6 @@ class NewSanApiService extends BaseApiService
             ];
 
             return $this->callApi($url, $params, 'post');
-        }, 'api_newsan');
+        }, 'api_newsan', 'postStatus');
     }
 }

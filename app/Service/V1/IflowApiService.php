@@ -53,7 +53,7 @@ class IflowApiService extends BaseApiService
             $token = $response['token'];
 
             return $token;
-        }, 'api_iflow');
+        }, 'api_iflow', 'getToken');
     }
 
     /**
@@ -82,7 +82,7 @@ class IflowApiService extends BaseApiService
             ];
 
             return $this->callApi($url, $params);
-        }, 'api_iflow');
+        }, 'api_iflow', 'getStatusOrder');
     }
 
     /**
@@ -119,7 +119,7 @@ class IflowApiService extends BaseApiService
             ];
 
             return $this->callApi($url, $params);
-        }, 'api_iflow');
+        }, 'api_iflow', 'getSellerOrders');
     }
 
     public function getSellerOrdersGenerator(Request $request): \Generator
