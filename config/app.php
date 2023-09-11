@@ -192,6 +192,8 @@ return [
 
     'iflow' => [
         'host'                     => env('IFLOW_HOST'),
+        'username'                 => env('IFLOW_USER'),
+        'password'                 => env('IFLOW_PASS'),
         'login_method'             => 'login',
         'order_state_method'       => 'order/state',
         'get_seller_orders_method' => 'v1/client/shipping/',
