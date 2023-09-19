@@ -6,6 +6,7 @@ namespace Modules\NewSan\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Modules\NewSan\Database\factories\NewSanOrderInformedFactory;
 
 /**
  * @OA\Schema(
@@ -64,6 +65,11 @@ class NewSanOrderInformed extends Model
 
     protected $primaryKey = 'api_id';
 
+    protected static function newFactory()
+    {
+        return NewSanOrderInformedFactory::new();
+    }
+
     public const REGISTRADO = 'Registrado';
 
     public const DESCARGADO = 'Descargado';
@@ -78,6 +84,10 @@ class NewSanOrderInformed extends Model
 
     public const ENTREGADO = 'Entregado';
 
+    public const PEDIDO_EN_DEVOLUCION = 'En proceso de devolucion';
+
+    public const NO_ENTREGADO = 'No Entregado';
+
     protected $fillable = [
         'api_id',
         'order_id',
@@ -87,10 +97,21 @@ class NewSanOrderInformed extends Model
         'state_name',
         'message',
         'state_date',
-        'informed',
+        'finalized',
     ];
 
     protected $casts = [
-        'informed' => 'boolean',
+        'finalized' => 'boolean',
     ];
+
+    public static function getUnfinalizedOrders()
+    {
+        return self::where('finalized', false)->get();
+    }
+
+    public function markAsFinalized()
+    {
+        $this->finalized = true;
+        $this->save();
+    }
 }

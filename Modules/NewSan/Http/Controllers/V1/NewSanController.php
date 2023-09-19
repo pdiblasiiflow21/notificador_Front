@@ -38,11 +38,11 @@ class NewSanController extends ApiController
     public function notifyOrders(Request $request)
     {
         try {
-            $numberSuccessfulNotifications = $this->newSanService->notifyOrders($request);
+            $response = $this->newSanService->notifyOrders($request);
 
             return response()->json([
                 'code'    => Response::HTTP_OK,
-                'message' => "Se notificaron $numberSuccessfulNotifications orders a la api de NewSan.",
+                'message' => 'Se notificaron '.$response['notifications'].' orders a la api de NewSan. Los finalizados son: '.$response['finalized'],
             ], Response::HTTP_OK);
         } catch (TokenVencidoException $e) {
             $statusCode = Response::HTTP_UNAUTHORIZED;
