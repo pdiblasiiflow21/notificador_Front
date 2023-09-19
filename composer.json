@@ -2,7 +2,10 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.1",
@@ -55,7 +58,8 @@
             "@php artisan key:generate --ansi"
         ],
         "format": "./vendor/bin/php-cs-fixer fix --allow-risky=yes",
-        "analyse": "./vendor/bin/phpstan analyse app --memory-limit=2G"
+        "analyse": "./vendor/bin/phpstan analyse app --memory-limit=2G",
+        "test": "./vendor/bin/sail php artisan test"
     },
     "extra": {
         "laravel": {

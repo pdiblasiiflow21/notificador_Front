@@ -11,6 +11,7 @@ Proyecto que sirve de base para aplicaciones futuras. Estas son algunas caracter
 - [Documentación con swagger](https://github.com/DarkaOnLine/L5-Swagger).
 - [Modularización de código](https://docs.laravelmodules.com/v10/introduction).
 - [Laravel Breeze, sistema de autenticacion y authorizacion](https://laravel.com/docs/10.x/starter-kits#laravel-breeze).
+- [Husky, hooks para commits](https://github.com/typicode/husky)
 
 ## Learning Laravel
 
@@ -26,4 +27,19 @@ chmod 777 -R config
 ### Regenerar documentacion
 ```sh
 php artisan l5-swagger:generate
+```
+
+### Opcional: para trabajar con los hooks para los commits
+Instalar las dependencias de node
+```
+$ sail npm install -E
+```
+Correr la instalacion de husky
+```
+sail npm run prepare
+```
+Dar permisos al script de husky
+```
+chmod +x .husky/pre-commit
+chmod +x .husky/pre-push
 ```
