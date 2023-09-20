@@ -26,9 +26,9 @@ class NewSanServiceTest extends TestCase
 
     private $newSanApiServiceMock;
 
-    private $newSanOrderRepoMock;
+    private $newSanOrderRepo;
 
-    private $newSanOrderInformedRepoMock;
+    private $newSanOrderInformedRepo;
 
     private $newSanService;
 
@@ -37,17 +37,17 @@ class NewSanServiceTest extends TestCase
         parent::setUp();
 
         // Mock API y repositories
-        $this->iflowApiServiceMock         = $this->createMock(IflowApiService::class);
-        $this->newSanApiServiceMock        = $this->createMock(NewSanApiService::class);
-        $this->newSanOrderRepoMock         = $this->createMock(NewSanOrderRepository::class);
-        $this->newSanOrderInformedRepoMock = $this->createMock(NewSanOrderInformedRepository::class);
+        $this->iflowApiServiceMock     = $this->createMock(IflowApiService::class);
+        $this->newSanApiServiceMock    = $this->createMock(NewSanApiService::class);
+        $this->newSanOrderRepo         = app(NewSanOrderRepository::class);
+        $this->newSanOrderInformedRepo = app(NewSanOrderInformedRepository::class);
 
         // Iniciar el servicio con los mocks
         $this->newSanService = new NewSanService(
             $this->iflowApiServiceMock,
             $this->newSanApiServiceMock,
-            $this->newSanOrderRepoMock,
-            $this->newSanOrderInformedRepoMock
+            $this->newSanOrderRepo,
+            $this->newSanOrderInformedRepo
         );
     }
 

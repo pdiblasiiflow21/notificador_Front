@@ -69,7 +69,7 @@ class NewSanService
                 'date'        => $order['date'],
             ];
 
-            NewSanOrder::updateOrCreate(
+            $this->newSanOrderRepository->updateOrCreate(
                 [
                     'shipment_id' => $order['shipment_id'],
                 ],
@@ -80,7 +80,7 @@ class NewSanService
 
     public function processNotFinalizedOrders()
     {
-        $uninformedOrders = NewSanOrder::getUnfinalizedOrders();
+        $uninformedOrders = $this->newSanOrderRepository->getUnfinalizedOrders();
 
         $uninformedOrders->each(function (NewSanOrder $newSanOrder) {
             $newSanOrder = $newSanOrder->toArray();
@@ -108,7 +108,7 @@ class NewSanService
         $dataFromDDBB['finalized'] = $isFinalized;
         $dataFromDDBB['state']     = $lastStateName;
 
-        $newSanOrder = NewSanOrder::updateOrCreate(
+        $newSanOrder = $this->newSanOrderRepository->updateOrCreate(
             [
                 'api_id' => $dataFromDDBB['api_id'],
             ],
@@ -131,7 +131,7 @@ class NewSanService
             'state_date'  => $lastStateArray['state_date'],
         ];
 
-        $orderInformed = NewSanOrderInformed::updateOrCreate(
+        $orderInformed = $this->newSanOrderInformedRepository->updateOrCreate(
             [
                 'shipment_id' => $newSanOrder->shipment_id,
             ],
@@ -155,18 +155,17 @@ class NewSanService
     public function processNotify()
     {
         // voy a informar siempre que el flag finalized no sea true
-        $uninformedOrders = NewSanOrderInformed::getUnfinalizedOrders();
+        $uninformedOrders = $this->newSanOrderInformedRepository->getUnfinalizedOrders();
 
         $uninformedOrders->each(function (NewSanOrderInformed $orderInformed) {
-            $res = $this->notifyApiNewSan($orderInformed);
+            $responseApi = $this->notifyApiNewSan($orderInformed);
 
             // con la respuesta del endpoint newsan voy a actualizar el flag finalized solo cuando sea Entregado o En proceso de devolucion
-            if ($res['code'] === 200) {
+            if ($responseApi['code'] === 200) {
                 $this->successfulNotifications++;
                 if (in_array($orderInformed->state_name, NewSanOrder::STATES_WITH_FINALIZED_TRUE, true)) {
                     $this->successfulFinalized++;
                     $orderInformed->markAsFinalized();
-                    $res = $orderInformed;
                 }
             }
         });

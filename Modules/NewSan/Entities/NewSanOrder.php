@@ -65,9 +65,4 @@ class NewSanOrder extends Model
     protected $casts = [
         'finalized' => 'boolean',
     ];
-
-    public static function getUnfinalizedOrders()
-    {
-        return self::where('finalized', false)->get();
-    }
 }

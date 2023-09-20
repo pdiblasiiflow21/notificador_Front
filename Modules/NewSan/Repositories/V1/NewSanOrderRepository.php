@@ -5,29 +5,23 @@ declare(strict_types=1);
 namespace Modules\NewSan\Repositories\V1;
 
 use App\Repository\EloquentRepository;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Collection;
 use Modules\NewSan\Entities\NewSanOrder;
 
 class NewSanOrderRepository extends EloquentRepository
 {
-    public function __construct()
+    public function __construct(NewSanOrder $model)
     {
-        parent::__construct(new NewSanOrder());
+        parent::__construct($model);
     }
 
-    public function saveNewSanOrder(array $order)
+    public function updateOrCreate(array $attributes, array $values): NewSanOrder
     {
-        $dataOrder = [
-            'api_id'      => $order['id'],
-            'order_id'    => $order['order_id'],
-            'shipment_id' => $order['shipment_id'],
-            'tracking_id' => $order['tracking_id'],
-            'state'       => $order['state'],
-            'date'        => $order['date'],
-        ];
+        return $this->model->updateOrCreate($attributes, $values);
+    }
 
-        $this->create($dataOrder);
-
-        Log::channel('new_san_orders')->info("Se ha guardado una nueva orden en NewSan_orders. ID de la orden: {$order['id']}");
+    public function getUnfinalizedOrders(): Collection
+    {
+        return $this->model->where('finalized', false)->get();
     }
 }

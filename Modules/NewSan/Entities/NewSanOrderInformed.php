@@ -104,11 +104,6 @@ class NewSanOrderInformed extends Model
         'finalized' => 'boolean',
     ];
 
-    public static function getUnfinalizedOrders()
-    {
-        return self::where('finalized', false)->get();
-    }
-
     public function markAsFinalized()
     {
         $this->finalized = true;
