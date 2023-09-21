@@ -51,6 +51,8 @@ class NotifyOrdersNewSan implements ShouldQueue
                 // Manejar el error
                 Log::channel('api_newsan')->error('Error en la API:', [
                     'error' => $e->getMessage(),
+                    'file'  => $e->getFile(),
+                    'line'  => $e->getLine(),
                 ]);
             }
         }

@@ -8,8 +8,10 @@ use App\Service\V1\IflowApiService;
 use App\Service\V1\NewSanApiService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
+use Modules\NewSan\Entities\NewSanNotificationLog;
 use Modules\NewSan\Entities\NewSanOrder;
 use Modules\NewSan\Entities\NewSanOrderInformed;
+use Modules\NewSan\Repositories\V1\NewSanNotificationLogRepository;
 use Modules\NewSan\Repositories\V1\NewSanOrderInformedRepository;
 use Modules\NewSan\Repositories\V1\NewSanOrderRepository;
 use Modules\NewSan\Services\V1\NewSanService;
@@ -30,6 +32,8 @@ class NewSanServiceTest extends TestCase
 
     private $newSanOrderInformedRepo;
 
+    private $newSanNotificationLogRepo;
+
     private $newSanService;
 
     public function setUp(): void
@@ -37,17 +41,19 @@ class NewSanServiceTest extends TestCase
         parent::setUp();
 
         // Mock API y repositories
-        $this->iflowApiServiceMock     = $this->createMock(IflowApiService::class);
-        $this->newSanApiServiceMock    = $this->createMock(NewSanApiService::class);
-        $this->newSanOrderRepo         = app(NewSanOrderRepository::class);
-        $this->newSanOrderInformedRepo = app(NewSanOrderInformedRepository::class);
+        $this->iflowApiServiceMock       = $this->createMock(IflowApiService::class);
+        $this->newSanApiServiceMock      = $this->createMock(NewSanApiService::class);
+        $this->newSanOrderRepo           = app(NewSanOrderRepository::class);
+        $this->newSanOrderInformedRepo   = app(NewSanOrderInformedRepository::class);
+        $this->newSanNotificationLogRepo = app(NewSanNotificationLogRepository::class);
 
         // Iniciar el servicio con los mocks
         $this->newSanService = new NewSanService(
             $this->iflowApiServiceMock,
             $this->newSanApiServiceMock,
             $this->newSanOrderRepo,
-            $this->newSanOrderInformedRepo
+            $this->newSanOrderInformedRepo,
+            $this->newSanNotificationLogRepo
         );
     }
 
@@ -401,7 +407,7 @@ class NewSanServiceTest extends TestCase
     }
 
     /** @dataProvider parametersNotifyOrders */
-    public function test_notify_orders_lo_hace_correctamente(array $orders, array $listsOfStates, array $expectedResponse, array $responsesApi)
+    public function test_notify_orders_lo_hace_correctamente(array $orders, array $listsOfStates, array $expectedResponse, array $responsesApi, array $notifiedArray, array $finalizedArray)
     {
         // Respuestas de API y repositorios simuladas
         $this->iflowApiServiceMock->method('getSellerOrdersGenerator')
@@ -427,6 +433,14 @@ class NewSanServiceTest extends TestCase
         // se verifica que la cantidad en NewSan_orders_informed es la correcta
         $count = NewSanOrderInformed::count();
         $this->assertSame(count($orders), $count);
+
+        $lastLog = NewSanNotificationLog::latest()->first();
+        $this->assertSame(
+            'Se notificaron '.$response['notifications'].' orders a la api de NewSan. Los finalizados son: '.$response['finalized'],
+            $lastLog->message
+        );
+        $this->assertSame($notifiedArray, json_decode($lastLog->notified));
+        $this->assertSame($finalizedArray, json_decode($lastLog->finalized));
     }
 
     public static function parametersNotifyOrders()
@@ -575,6 +589,11 @@ class NewSanServiceTest extends TestCase
                         'code' => 200,
                     ],
                 ],
+                [
+                    22534195,
+                    22539345,
+                ],
+                [],
             ],
             '3 ordenes nuevas; ultimos estados : No Entregado, Pedido en Distribución, En proceso de devolucion' => [
                 [
@@ -788,6 +807,14 @@ class NewSanServiceTest extends TestCase
                     [
                         'code' => 200,
                     ],
+                ],
+                [
+                    22495644,
+                    22534195,
+                    22539345,
+                ],
+                [
+                    22495644,
                 ],
             ],
         ];

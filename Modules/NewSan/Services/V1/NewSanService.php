@@ -10,6 +10,7 @@ use App\Service\V1\NewSanApiService;
 use Illuminate\Http\Request;
 use Modules\NewSan\Entities\NewSanOrder;
 use Modules\NewSan\Entities\NewSanOrderInformed;
+use Modules\NewSan\Repositories\V1\NewSanNotificationLogRepository;
 use Modules\NewSan\Repositories\V1\NewSanOrderInformedRepository;
 use Modules\NewSan\Repositories\V1\NewSanOrderRepository;
 
@@ -23,28 +24,61 @@ class NewSanService
 
     private $newSanOrderInformedRepository;
 
+    private $newSanNotificationLogRepository;
+
     private $successfulNotifications = 0;
 
     private $successfulFinalized = 0;
+
+    private $notifiedArray = [];
+
+    private $finalizedArray = [];
 
     public function __construct(
         IflowApiService $iflowApiService,
         NewSanApiService $newSanApiService,
         NewSanOrderRepository $newSanOrderRepository,
-        NewSanOrderInformedRepository $newSanOrderInformedRepository
+        NewSanOrderInformedRepository $newSanOrderInformedRepository,
+        NewSanNotificationLogRepository $newSanNotificationLogRepository
     ) {
-        $this->iflowApiService               = $iflowApiService;
-        $this->newSanApiService              = $newSanApiService;
-        $this->newSanOrderRepository         = $newSanOrderRepository;
-        $this->newSanOrderInformedRepository = $newSanOrderInformedRepository;
+        $this->iflowApiService                 = $iflowApiService;
+        $this->newSanApiService                = $newSanApiService;
+        $this->newSanOrderRepository           = $newSanOrderRepository;
+        $this->newSanOrderInformedRepository   = $newSanOrderInformedRepository;
+        $this->newSanNotificationLogRepository = $newSanNotificationLogRepository;
+    }
+
+    public function notificationLogs(Request $request)
+    {
+        $paginatedData = $this->newSanNotificationLogRepository->notificationLogs($request);
+
+        return [
+            'data'        => $paginatedData->items(),
+            'total'       => $paginatedData->total(),
+            'perPage'     => $paginatedData->perPage(),
+            'currentPage' => $paginatedData->currentPage(),
+            'lastPage'    => $paginatedData->lastPage(),
+        ];
     }
 
     public function notifyOrders(Request $request)
     {
         try {
+            $startTime = microtime(true);
+
             $this->processSellerOrders($request);
             $this->processNotFinalizedOrders();
             $this->processNotify();
+
+            $endTime  = microtime(true);
+            $duration = ($endTime - $startTime) * 1000;
+
+            $this->newSanNotificationLogRepository->create([
+                'message'       => 'Se notificaron '.$this->successfulNotifications.' orders a la api de NewSan. Los finalizados son: '.$this->successfulFinalized,
+                'notified'      => json_encode($this->notifiedArray),
+                'finalized'     => json_encode($this->finalizedArray),
+                'response_time' => $duration,
+            ]);
 
             return [
                 'notifications' => $this->successfulNotifications,
@@ -105,6 +139,7 @@ class NewSanService
         // Verifica si el último estado está entre los estados finalizados
         $isFinalized = in_array($lastStateName, NewSanOrder::STATES_WITH_FINALIZED_TRUE, true);
 
+        // lo marco como finalized para que que se vuelva a tomar en el proceso
         $dataFromDDBB['finalized'] = $isFinalized;
         $dataFromDDBB['state']     = $lastStateName;
 
@@ -163,9 +198,13 @@ class NewSanService
             // con la respuesta del endpoint newsan voy a actualizar el flag finalized solo cuando sea Entregado o En proceso de devolucion
             if ($responseApi['code'] === 200) {
                 $this->successfulNotifications++;
+                $this->notifiedArray[] = $orderInformed->api_id;
+
+                // una vez notificado a la api de NewSan lo marco como finalized (si corresponde) para que no se vuelva a tomar en el proceso
                 if (in_array($orderInformed->state_name, NewSanOrder::STATES_WITH_FINALIZED_TRUE, true)) {
                     $this->successfulFinalized++;
                     $orderInformed->markAsFinalized();
+                    $this->finalizedArray[] = $orderInformed->api_id;
                 }
             }
         });

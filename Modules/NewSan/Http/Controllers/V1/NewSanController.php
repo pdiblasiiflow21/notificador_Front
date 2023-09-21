@@ -19,6 +19,23 @@ class NewSanController extends ApiController
         $this->newSanService = $newSanService;
     }
 
+    public function notificationLogs(Request $request)
+    {
+        try {
+            $response = $this->newSanService->notificationLogs($request);
+
+            return response()->json([
+                'code'   => Response::HTTP_OK,
+                'result' => $response,
+            ], Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
+            $message    = $th->getMessage();
+        }
+
+        return response()->json(['code' => $statusCode, 'message' => $message], $statusCode);
+    }
+
     /**
      * @OA\Get(
      *      security={{"sanctum": {}}},

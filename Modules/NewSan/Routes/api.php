@@ -17,5 +17,6 @@ use Modules\NewSan\Http\Controllers\V1\NewSanController;
 */
 
 Route::prefix('v1/newsan')->group(function () {
+    Route::get('notification-logs', [NewSanController::class, 'notificationLogs'])->name('v1.newsan.notification-logs');
     Route::get('notify-orders', [NewSanController::class, 'notifyOrders'])->name('v1.newsan.notifyOrders');
 });
