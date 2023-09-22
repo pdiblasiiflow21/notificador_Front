@@ -12,6 +12,7 @@ Proyecto que sirve de base para aplicaciones futuras. Estas son algunas caracter
 - [Modularización de código](https://docs.laravelmodules.com/v10/introduction).
 - [Laravel Breeze, sistema de autenticacion y authorizacion](https://laravel.com/docs/10.x/starter-kits#laravel-breeze).
 - [Husky, hooks para commits](https://github.com/typicode/husky)
+- [Laravel-permission, hooks para commits](https://spatie.be/docs/laravel-permission/v5/introduction)
 
 ## Learning Laravel
 
