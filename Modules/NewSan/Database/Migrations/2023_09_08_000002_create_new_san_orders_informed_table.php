@@ -21,7 +21,7 @@ return new class() extends Migration {
             $table->string('state_name');
             $table->string('message');
             $table->string('state_date')->comment('Fecha informada por la api');
-            $table->boolean('informed')->default(false)->comment('Flag que indica si la orden está informada a la api de NewSan o no.');
+            $table->boolean('finalized')->default(false)->comment('Flag que indica si la orden ya no se tiene que notificar a la api de NewSan. Si esta en 1 no se debe notificar, si es 0, se debe notificar.');
             $table->timestamps();
         });
 

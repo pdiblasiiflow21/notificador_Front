@@ -1,0 +1,11 @@
+{
+    "scripts": {
+        "prepare": "husky install",
+        "pre-commit": "composer format && composer analyse",
+        "pre-push": "composer test"
+    },
+    "devDependencies": {
+        "husky": "^8.0.3",
+        "lint-staged": "^14.0.1"
+    }
+}

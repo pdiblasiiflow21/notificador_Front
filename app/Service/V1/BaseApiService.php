@@ -63,7 +63,11 @@ class BaseApiService
                 throw new CredencialesInvalidasException($message);
             }
         } catch (\Throwable $th) {
-            Log::channel($channelLogName)->error('Respuesta de la api: '.$th->getMessage());
+            Log::channel($channelLogName)->error('Respuesta de la api: ', [
+                'error' => $th->getMessage(),
+                'file'  => $th->getFile(),
+                'line'  => $th->getLine(),
+            ]);
 
             throw new \Exception('Error en la API');
         }

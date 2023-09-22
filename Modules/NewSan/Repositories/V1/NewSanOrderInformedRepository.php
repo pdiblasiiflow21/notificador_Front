@@ -5,31 +5,23 @@ declare(strict_types=1);
 namespace Modules\NewSan\Repositories\V1;
 
 use App\Repository\EloquentRepository;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Collection;
 use Modules\NewSan\Entities\NewSanOrderInformed;
 
 class NewSanOrderInformedRepository extends EloquentRepository
 {
-    public function __construct()
+    public function __construct(NewSanOrderInformed $model)
     {
-        parent::__construct(new NewSanOrderInformed());
+        parent::__construct($model);
     }
 
-    public function saveNewSanOrderInformed($order, $lastState)
+    public function updateOrCreate(array $attributes, array $values): NewSanOrderInformed
     {
-        $dataOrderInformed = [
-            'api_id'      => $order['api_id'],
-            'order_id'    => $order['order_id'],
-            'shipment_id' => $order['shipment_id'],
-            'tracking_id' => $order['tracking_id'],
-            'state_id'    => $lastState['state_id'],
-            'state_name'  => $lastState['state_name'],
-            'message'     => $lastState['details'],
-            'state_date'  => $lastState['state_date'],
-        ];
+        return $this->model->updateOrCreate($attributes, $values);
+    }
 
-        $this->create($dataOrderInformed);
-
-        Log::channel('new_san_orders_informed')->info("Se ha guardado una nueva orden en NewSan_orders_informed. ID de la orden: {$order['api_id']}");
+    public function getUnfinalizedOrders(): Collection
+    {
+        return $this->model->where('finalized', false)->get();
     }
 }

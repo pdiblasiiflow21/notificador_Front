@@ -44,15 +44,15 @@ class NotifyOrdersNewSan implements ShouldQueue
                 request()->headers->set('Authorization', 'Bearer '.$token);
 
                 // Usa el método del servicio NewSanService para notificar los pedidos
-                $successfulNotifications = $newSanService->notifyOrders(request());
+                $response = $newSanService->notifyOrders(request());
 
-                Log::channel('api_newsan')->info('Notificaciones exitosas:', [
-                    'successfulNotifications' => $successfulNotifications,
-                ]);
+                Log::channel('api_newsan')->info('Se notificaron '.$response['notifications'].' orders a la api de NewSan. Los finalizados son: '.$response['finalized']);
             } catch (\Exception $e) {
                 // Manejar el error
                 Log::channel('api_newsan')->error('Error en la API:', [
                     'error' => $e->getMessage(),
+                    'file'  => $e->getFile(),
+                    'line'  => $e->getLine(),
                 ]);
             }
         }

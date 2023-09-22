@@ -124,8 +124,8 @@ class IflowApiService extends BaseApiService
 
     public function getSellerOrdersGenerator(Request $request): \Generator
     {
-        $maxPage = $request->input('pages', 1);    // Límite máximo de páginas
-        $limit   = $request->input('limit', 500);  // Órdenes por página
+        $maxPage = $request->input('pages', 18);    // Límite máximo de páginas
+        $limit   = $request->input('limit', 100);  // Órdenes por página
 
         for ($page = 1; $page <= $maxPage; $page++) {
             $request->merge(['page' => $page, 'limit' => $limit]);
