@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Modules\NewSan\Services\V1;
 
 use App\Exceptions\Api\TokenVencidoException;
+use App\Exports\NewSanOrderInformedExport;
 use App\Service\V1\IflowApiService;
 use App\Service\V1\NewSanApiService;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use Modules\NewSan\Entities\NewSanOrder;
 use Modules\NewSan\Entities\NewSanOrderInformed;
 use Modules\NewSan\Repositories\V1\NewSanNotificationLogRepository;
@@ -59,6 +61,19 @@ class NewSanService
             'currentPage' => $paginatedData->currentPage(),
             'lastPage'    => $paginatedData->lastPage(),
         ];
+    }
+
+    public function exportNotificationLog(int $logId, array $columns)
+    {
+        $dateTimeNow = date('d-m-Y_H-i-s');
+        $fileName    = 'NewSan_notificados_'.$logId.'_'.$dateTimeNow.'.csv';
+        $export      = new NewSanOrderInformedExport($logId, $columns);
+
+        // Puedo guardar el archivo que el cliente descarga, es una opcion
+        // $filePath = 'exports/' . $fileName;
+        // Excel::store($export, $filePath, 'local', \Maatwebsite\Excel\Excel::CSV);
+
+        return Excel::download($export, $fileName, \Maatwebsite\Excel\Excel::CSV);
     }
 
     public function notifyOrders(Request $request)

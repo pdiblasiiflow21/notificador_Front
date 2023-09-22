@@ -19,14 +19,15 @@ class NewSanNotificationLogRepository extends EloquentRepository
 
     public function notificationLogs(Request $request): LengthAwarePaginator
     {
-        $per_page = ! $request->per_page ? self::PER_PAGE : $request->per_page;
+        $per_page    = $request->input('per_page', self::PER_PAGE);
+        $currentPage = $request->input('page', 1);
 
-        $builder = $this->aplicarFiltrosBusqueda($request, ['NewSan_notification_logs.*']);
+        $builder = $this->applyFiltersNotificationLogs($request, ['NewSan_notification_logs.*']);
 
-        return $builder->paginate($per_page);
+        return $builder->paginate($per_page, ['*'], 'page', $currentPage);
     }
 
-    private function aplicarFiltrosBusqueda(Request $request, array $columns = []): \Illuminate\Database\Eloquent\Builder
+    private function applyFiltersNotificationLogs(Request $request, array $columns = []): \Illuminate\Database\Eloquent\Builder
     {
         $newSanNotificationLogQuery = NewSanNotificationLog::query();
 

@@ -65,6 +65,8 @@ class NewSanOrderInformed extends Model
 
     protected $primaryKey = 'api_id';
 
+    public $incrementing = false;
+
     protected static function newFactory()
     {
         return NewSanOrderInformedFactory::new();

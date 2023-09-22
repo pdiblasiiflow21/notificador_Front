@@ -6,6 +6,7 @@ namespace Modules\NewSan\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Modules\NewSan\Database\factories\NewSanNotificationLogFactory;
 
 class NewSanNotificationLog extends Model
 {
@@ -15,7 +16,7 @@ class NewSanNotificationLog extends Model
 
     protected static function newFactory()
     {
-        // return NewSanOrderFactory::new();
+        return NewSanNotificationLogFactory::new();
     }
 
     protected $fillable = [

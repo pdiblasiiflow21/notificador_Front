@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Modules\NewSan\Tests\Unit\Services\V1;
 
+use App\Exports\NewSanOrderInformedExport;
 use App\Service\V1\IflowApiService;
 use App\Service\V1\NewSanApiService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use Modules\NewSan\Entities\NewSanNotificationLog;
 use Modules\NewSan\Entities\NewSanOrder;
 use Modules\NewSan\Entities\NewSanOrderInformed;
@@ -55,6 +57,140 @@ class NewSanServiceTest extends TestCase
             $this->newSanOrderInformedRepo,
             $this->newSanNotificationLogRepo
         );
+    }
+
+    /** @dataProvider parametersNotificationLogs */
+    public function test_notification_logs_devuelve_paginado_esperado(int $logEntries, array $params)
+    {
+        if ($logEntries > 0) {
+            NewSanNotificationLog::factory($logEntries)->create();
+        }
+
+        $request = Request::create(route('v1.newsan.notification-logs', $params), 'GET');
+
+        $response = $this->newSanService->notificationLogs($request);
+
+        $this->assertIsArray($response);
+        $this->assertArrayHasKey('data', $response);
+
+        $this->assertCount(min($params['per_page'], max(0, $logEntries - $params['per_page'] * ($params['page'] - 1))), $response['data']);
+        $this->assertArrayHasKey('total', $response);
+        $this->assertSame($logEntries, $response['total']);
+
+        $this->assertArrayHasKey('perPage', $response);
+        $this->assertSame($params['per_page'], $response['perPage']);
+
+        $this->assertArrayHasKey('currentPage', $response);
+        $this->assertSame($params['page'], $response['currentPage']);
+
+        $lastPage = max((int) ceil($logEntries / $params['per_page']), 1);
+        $this->assertArrayHasKey('lastPage', $response);
+        $this->assertSame($lastPage, $response['lastPage']);
+    }
+
+    /** @dataProvider parametersExportNotificationLog */
+    public function test_export_notification_log(array $paramsCreateLog, array $apiIds)
+    {
+        Excel::fake();
+
+        $newSanLog = NewSanNotificationLog::factory($paramsCreateLog)->create();
+
+        // $pe = null;
+        // foreach ($apiIds as $value) {
+        //     $pe = NewSanOrderInformed::factory()->create(['api_id' => $value]);
+        // }
+
+        $dateTimeNow = date('d-m-Y_H-i-s');
+        $fileName    = 'NewSan_notificados_'.$newSanLog->id.'_'.$dateTimeNow.'.csv';
+
+        $columns = [
+            'API ID'      => 'api_id',
+            'ORDER ID'    => 'order_id',
+            'SHIPMENT ID' => 'shipment_id',
+            'TRACKING ID' => 'tracking_id',
+            'STATE ID'    => 'state_id',
+            'MESSAGE'     => 'message',
+            'STATE DATE'  => 'state_date',
+            'FINALIZED'   => 'finalized',
+            'UPDATED AT'  => 'updated_at',
+        ];
+
+        $this->newSanService->exportNotificationLog($newSanLog->id, $columns);
+
+        Excel::assertDownloaded($fileName);
+        /*
+        Excel::assertDownloaded($fileName, function(NewSanOrderInformedExport $export) use ($columns) {
+            $exportedRows = $export->collection();
+            // Assert that the correct export is downloaded.
+            // return $export->collection()->contains('1234;');
+            // Aquí asertamos que cada fila tiene las claves de $columns
+            foreach ($exportedRows as $row) {
+                foreach (array_values($columns) as $column) {
+                    $this->assertTrue(isset($row[$column]), "The $column does not exist in the exported row");
+                }
+            }
+
+            // Si quieres también puedes verificar si los valores son los esperados
+            // $this->assertEquals('expectedValue', $row['columnKey']);
+
+            return true;
+        });
+        */
+    }
+
+    public static function parametersExportNotificationLog()
+    {
+        return [
+            '2 notificados, 1 finalizado' => [
+                [
+                    'message'  => 'Se notificaron 2 orders a la api de NewSan. Los finalizados son: 1',
+                    'notified' => json_encode([
+                        1234,
+                        4321,
+                    ]),
+                    'finalized' => json_encode([
+                        1234,
+                    ]),
+                ],
+                [
+                    1234,
+                    4321,
+                ],
+            ],
+        ];
+    }
+
+    public static function parametersNotificationLogs()
+    {
+        return [
+            '0 registros en log' => [
+                0,
+                [
+                    'page'     => 1,
+                    'per_page' => 10,
+                    'column'   => 'created_at',
+                    'order_by' => 'desc',
+                ],
+            ],
+            '2 registros en log' => [
+                2,
+                [
+                    'page'     => 2,
+                    'per_page' => 1,
+                    'column'   => 'created_at',
+                    'order_by' => 'desc',
+                ],
+            ],
+            '10 registros en log' => [
+                10,
+                [
+                    'page'     => 2,
+                    'per_page' => 5,
+                    'column'   => 'created_at',
+                    'order_by' => 'desc',
+                ],
+            ],
+        ];
     }
 
     /** @dataProvider parametersProcessNotFinalizedOrders */

@@ -16,6 +16,8 @@ class NewSanOrder extends Model
 
     protected $primaryKey = 'api_id';
 
+    public $incrementing = false;
+
     public const NO_FINALIZADO = 0;
 
     public const FINALIZADO = 1;
