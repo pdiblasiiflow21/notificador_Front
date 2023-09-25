@@ -73,7 +73,7 @@ class NewSanServiceTest extends TestCase
         $this->assertIsArray($response);
         $this->assertArrayHasKey('data', $response);
 
-        $this->assertCount(min($params['per_page'], max(0, $logEntries - $params['per_page'] * ($params['page'] - 1))), $response['data']);
+        $this->assertCount(min($params['per_page'], max(0, $logEntries - $params['per_page'] * ($params['current_page'] - 1))), $response['data']);
         $this->assertArrayHasKey('total', $response);
         $this->assertSame($logEntries, $response['total']);
 
@@ -81,7 +81,7 @@ class NewSanServiceTest extends TestCase
         $this->assertSame($params['per_page'], $response['perPage']);
 
         $this->assertArrayHasKey('currentPage', $response);
-        $this->assertSame($params['page'], $response['currentPage']);
+        $this->assertSame($params['current_page'], $response['currentPage']);
 
         $lastPage = max((int) ceil($logEntries / $params['per_page']), 1);
         $this->assertArrayHasKey('lastPage', $response);
@@ -166,28 +166,28 @@ class NewSanServiceTest extends TestCase
             '0 registros en log' => [
                 0,
                 [
-                    'page'     => 1,
-                    'per_page' => 10,
-                    'column'   => 'created_at',
-                    'order_by' => 'desc',
+                    'current_page' => 1,
+                    'per_page'     => 10,
+                    'column'       => 'created_at',
+                    'order_by'     => 'desc',
                 ],
             ],
             '2 registros en log' => [
                 2,
                 [
-                    'page'     => 2,
-                    'per_page' => 1,
-                    'column'   => 'created_at',
-                    'order_by' => 'desc',
+                    'current_page' => 2,
+                    'per_page'     => 1,
+                    'column'       => 'created_at',
+                    'order_by'     => 'desc',
                 ],
             ],
             '10 registros en log' => [
                 10,
                 [
-                    'page'     => 2,
-                    'per_page' => 5,
-                    'column'   => 'created_at',
-                    'order_by' => 'desc',
+                    'current_page' => 2,
+                    'per_page'     => 5,
+                    'column'       => 'created_at',
+                    'order_by'     => 'desc',
                 ],
             ],
         ];
