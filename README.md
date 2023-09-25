@@ -20,6 +20,18 @@ Laravel tiene una gran [documentation](https://laravel.com/docs) para iniciar co
 
 Se recomienda hacer el [Bootcamp de Laravel](https://bootcamp.laravel.com).
 
+## Uso
+Una vez clonado el repositorio, para instalar los paquetes:
+```sh
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v "$(pwd):/var/www/html" \
+    -w /var/www/html \
+    laravelsail/php82-composer:latest \
+    composer install --ignore-platform-reqs
+```
+Luego
+cp .env.example .env
 ### Brindar permisos al directorio storage dentro del laravel.test-1
 ```sh
 chmod 777 -R storage
@@ -28,6 +40,15 @@ chmod 777 -R config
 ### Regenerar documentacion
 ```sh
 php artisan l5-swagger:generate
+```
+### Si quiero cargar los usuarios con permisos de prueba
+```sh
+sail php artisan db:seed --class=RolesAndPermissionsDemoSeeder
+```
+
+### Si quiero ver los permisos del rol
+```sh
+sail php artisan permission:show
 ```
 
 ### Opcional: para trabajar con los hooks para los commits

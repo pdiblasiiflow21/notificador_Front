@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\V1\ApiController;
 use App\Http\Controllers\V1\IflowApiController;
 use App\Http\Controllers\V1\NewSanApiController;
 use Illuminate\Http\Request;
@@ -19,7 +20,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
+    $user = $request->user();
+
+    return response()->json([
+        'user'        => $user,
+        'permissions' => $user->getPermissionsViaRoles()->pluck('name'),
+    ]);
+});
+
+Route::middleware('auth:sanctum')->group(function() {
+    Route::get('/user/permissions', [ApiController::class, 'getPermissions']);
 });
 
 Route::prefix('v1/iflow')->group(function () {
