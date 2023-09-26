@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\NewSan\Entities;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\NewSan\Database\factories\NewSanOrderInformedFactory;
@@ -72,23 +73,23 @@ class NewSanOrderInformed extends Model
         return NewSanOrderInformedFactory::new();
     }
 
-    public const REGISTRADO = 'Registrado';
-
-    public const DESCARGADO = 'Descargado';
-
-    public const DESPACHADO = 'Despachado a Nodo Interno';
-
-    public const ARRIBADO = 'Arribo a Nodo';
-
-    public const PACTADO = 'Pactado';
-
-    public const PEDIDO = 'Pedido en Distribución';
-
-    public const ENTREGADO = 'Entregado';
-
-    public const PEDIDO_EN_DEVOLUCION = 'En proceso de devolucion';
-
-    public const NO_ENTREGADO = 'No Entregado';
+    public const HASHMAP_STATE_NAME_TO_STATE_NAME_UPPER = [
+        'Registrado'                => 'REGISTRADO',
+        'Retirado'                  => 'RETIRADO',
+        'Descargado'                => 'DESCARGADO',
+        'Entregado'                 => 'ENTREGADO',
+        'No Entregado'              => 'NO_ENTREGADO',
+        'Despachado a Nodo Interno' => 'DESPACHADO_A_NODO_INTERNO',
+        'Arribo a Nodo'             => 'ARRIBO_A_NODO',
+        'Devolución'                => 'DEVOLUCION',
+        'Pedido en Distribución'    => 'PEDIDO_EN_DISTRIBUCION',
+        'En proceso de devolucion'  => 'EN_PROCESO_DEVOLUCION',
+        'Devolucion a Central'      => 'DEVOLUCION_A_CENTRAL',
+        'Pactado'                   => 'PACTADO',
+        'Cancelado'                 => 'CANCELADO',
+        'Devolución No Entregada'   => 'DEVOLUCION_NO_ENTREGADA',
+        'Contingencia'              => 'CONTINGENCIA',
+    ];
 
     protected $fillable = [
         'api_id',
@@ -110,5 +111,10 @@ class NewSanOrderInformed extends Model
     {
         $this->finalized = true;
         $this->save();
+    }
+
+    public static function transformDateTime($fecha)
+    {
+        return Carbon::createFromFormat('d/m/Y H:i', $fecha)->format('Y-m-d\TH:i');
     }
 }
