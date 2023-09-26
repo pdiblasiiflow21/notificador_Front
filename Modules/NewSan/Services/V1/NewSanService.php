@@ -243,9 +243,9 @@ class NewSanService
             'IdOrder'    => $orderInformed->order_id,
             'IdShip'     => $orderInformed->shipment_id,
             'IdTrack'    => $orderInformed->tracking_id,
-            'Last_state' => $orderInformed->state_name,
+            'Last_state' => NewSanOrderInformed::HASHMAP_STATE_NAME_TO_STATE_NAME_UPPER[$orderInformed->state_name],
             'Details'    => $orderInformed->message,
-            'State_date' => $orderInformed->state_date,
+            'State_date' => NewSanOrderInformed::transformDateTime($orderInformed->state_date),
         ];
 
         $apiResponse = $this->newSanApiService->postStatus($orderData);
