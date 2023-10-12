@@ -542,6 +542,83 @@ class NewSanServiceTest extends TestCase
         ];
     }
 
+    /** @dataProvider parametersNotifyOrdersRepetidos */
+    public function test_notify_no_notifica_el_mismo_estado(array $orderInformedData, array $expectedResponse, array $responseApi)
+    {
+        $orderInformed = NewSanOrderInformed::factory()->create($orderInformedData);
+        $collection    = new \Illuminate\Database\Eloquent\Collection([$orderInformed]);
+
+        $newSanOrderInformedRepo = $this->createMock(NewSanOrderInformedRepository::class);
+
+        $newSanOrderInformedRepo->expects($this->once())
+            ->method('getUnfinalizedOrders')
+            ->willReturn($collection);
+
+        $this->newSanApiServiceMock->expects($this->any())
+            ->method('postStatus')
+            ->willReturn($responseApi);
+
+        $newSanService = new NewSanService(
+            $this->iflowApiServiceMock,
+            $this->newSanApiServiceMock,
+            $this->newSanOrderRepo,
+            $newSanOrderInformedRepo,
+            $this->newSanNotificationLogRepo
+        );
+
+        $response = $newSanService->notifyOrders(new Request());
+
+        $this->assertSame($expectedResponse, $response);
+    }
+
+    public static function parametersNotifyOrdersRepetidos()
+    {
+        return [
+            'orden informada con estado No Entregado, mismo estado notificado anteriormente' => [
+                [
+                    'api_id'              => 1122334455,
+                    'order_id'            => '97200000288991',
+                    'shipment_id'         => 'RRZ0000002102879',
+                    'tracking_id'         => 'OR0022303160',
+                    'state_id'            => 26,
+                    'state_name'          => 'No Entregado',
+                    'message'             => 'No pudimos visitar tu domicilio el día de hoy, volveremos a intentarlo a la brevedad',
+                    'state_date'          => '08/09/2023 18:21',
+                    'last_notified_state' => 'No Entregado',
+                    'finalized'           => 0,
+                ],
+                [
+                    'notifications' => 0,
+                    'finalized'     => 0,
+                ],
+                [
+                    'code' => 200,
+                ],
+            ],
+            'orden informada con estado Registrado, mismo estado notificado anteriormente' => [
+                [
+                    'api_id'              => 1122334455,
+                    'order_id'            => '97200000288991',
+                    'shipment_id'         => 'RRZ0000002102879',
+                    'tracking_id'         => 'OR0022303160',
+                    'state_id'            => 1,
+                    'state_name'          => 'Registrado',
+                    'message'             => 'No pudimos visitar tu domicilio el día de hoy, volveremos a intentarlo a la brevedad',
+                    'state_date'          => '08/09/2023 18:21',
+                    'last_notified_state' => 'Registrado',
+                    'finalized'           => 0,
+                ],
+                [
+                    'notifications' => 0,
+                    'finalized'     => 0,
+                ],
+                [
+                    'code' => 200,
+                ],
+            ],
+        ];
+    }
+
     /** @dataProvider parametersNotifyOrders */
     public function test_notify_orders_lo_hace_correctamente(array $orders, array $listsOfStates, array $expectedResponse, array $responsesApi, array $notifiedArray, array $finalizedArray)
     {
