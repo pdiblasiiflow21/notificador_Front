@@ -28,7 +28,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     ]);
 });
 
-Route::middleware('auth:sanctum')->group(function() {
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/permissions', [ApiController::class, 'getPermissions']);
 });
 

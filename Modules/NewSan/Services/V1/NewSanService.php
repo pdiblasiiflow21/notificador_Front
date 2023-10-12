@@ -208,18 +208,25 @@ class NewSanService
         $uninformedOrders = $this->newSanOrderInformedRepository->getUnfinalizedOrders();
 
         $uninformedOrders->each(function (NewSanOrderInformed $orderInformed) {
-            $responseApi = $this->notifyApiNewSan($orderInformed);
+            // Verifica si el estado actual es diferente del estado previamente notificado
+            if ($orderInformed->state_name !== $orderInformed->last_notified_state) {
+                $responseApi = $this->notifyApiNewSan($orderInformed);
 
-            // con la respuesta del endpoint newsan voy a actualizar el flag finalized solo cuando sea Entregado o En proceso de devolucion
-            if ($responseApi['code'] === 200) {
-                $this->successfulNotifications++;
-                $this->notifiedArray[] = $orderInformed->api_id;
+                // con la respuesta del endpoint newsan voy a actualizar el flag finalized solo cuando sea Entregado o En proceso de devolucion
+                if ($responseApi['code'] === 200) {
+                    $this->successfulNotifications++;
+                    $this->notifiedArray[] = $orderInformed->api_id;
 
-                // una vez notificado a la api de NewSan lo marco como finalized (si corresponde) para que no se vuelva a tomar en el proceso
-                if (in_array($orderInformed->state_name, NewSanOrder::STATES_WITH_FINALIZED_TRUE, true)) {
-                    $this->successfulFinalized++;
-                    $orderInformed->markAsFinalized();
-                    $this->finalizedArray[] = $orderInformed->api_id;
+                    // Actualiza el estado notificado
+                    $orderInformed->last_notified_state = $orderInformed->state_name;
+                    $orderInformed->save();
+
+                    // una vez notificado a la api de NewSan lo marco como finalized (si corresponde) para que no se vuelva a tomar en el proceso
+                    if (in_array($orderInformed->state_name, NewSanOrder::STATES_WITH_FINALIZED_TRUE, true)) {
+                        $this->successfulFinalized++;
+                        $orderInformed->markAsFinalized();
+                        $this->finalizedArray[] = $orderInformed->api_id;
+                    }
                 }
             }
         });

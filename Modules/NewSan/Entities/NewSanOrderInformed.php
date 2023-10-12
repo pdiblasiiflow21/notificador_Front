@@ -99,6 +99,7 @@ class NewSanOrderInformed extends Model
         'state_name',
         'message',
         'state_date',
+        'last_notified_state',
         'finalized',
     ];
 
