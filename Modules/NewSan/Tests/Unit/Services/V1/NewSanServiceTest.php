@@ -9,6 +9,7 @@ use App\Service\V1\IflowApiService;
 use App\Service\V1\NewSanApiService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Modules\NewSan\Entities\NewSanNotificationLog;
 use Modules\NewSan\Entities\NewSanOrder;
@@ -617,6 +618,38 @@ class NewSanServiceTest extends TestCase
                 ],
             ],
         ];
+    }
+
+    public function test_process_notify_loguea_si_api_new_san_no_devuelve_200()
+    {
+        $orderInformed = NewSanOrderInformed::factory()->create([
+            'state_name'          => 'AlgunEstado',
+            'last_notified_state' => 'EstadoPrevio',
+        ]);
+        $collection = new \Illuminate\Database\Eloquent\Collection([$orderInformed]);
+
+        $newSanOrderInformedRepo = $this->createMock(NewSanOrderInformedRepository::class);
+        $newSanOrderInformedRepo->expects($this->once())
+            ->method('getUnfinalizedOrders')
+            ->willReturn($collection);
+
+        // Simuo que la respuesta de la API es diferente a 200
+        $this->newSanApiServiceMock->expects($this->once())
+            ->method('postStatus')
+            ->willReturn(['code' => 400]);  // O cualquier otro código que no sea 200
+
+        // Mockeo el logger para esperar una llamada
+        Log::shouldReceive('error')->once()->with('Error al notificar a la API de NewSan con API ID: '.$orderInformed->api_id);
+
+        $newSanService = new NewSanService(
+            $this->iflowApiServiceMock,
+            $this->newSanApiServiceMock,
+            $this->newSanOrderRepo,
+            $newSanOrderInformedRepo,
+            $this->newSanNotificationLogRepo
+        );
+
+        $newSanService->processNotify();
     }
 
     /** @dataProvider parametersNotifyOrders */

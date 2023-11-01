@@ -9,6 +9,7 @@ use App\Exports\NewSanOrderInformedExport;
 use App\Service\V1\IflowApiService;
 use App\Service\V1\NewSanApiService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Modules\NewSan\Entities\NewSanOrder;
 use Modules\NewSan\Entities\NewSanOrderInformed;
@@ -227,6 +228,8 @@ class NewSanService
                         $orderInformed->markAsFinalized();
                         $this->finalizedArray[] = $orderInformed->api_id;
                     }
+                } else {
+                    Log::error('Error al notificar a la API de NewSan con API ID: '.$orderInformed->api_id);
                 }
             }
         });
