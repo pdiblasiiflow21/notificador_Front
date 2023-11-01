@@ -18,12 +18,12 @@ use Modules\NewSan\Http\Controllers\V1\NewSanController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1/newsan')->group(function () {
     Route::get('notification-logs', [NewSanController::class, 'notificationLogs'])
-        ->middleware(['permission:NewSan-ver_notificaciones'])
+        ->middleware(['permission:NewSan.ver_notificaciones'])
         ->name('v1.newsan.notification-logs');
     Route::get('notify-orders', [NewSanController::class, 'notifyOrders'])
-        ->middleware(['permission:NewSan-correr_notificaciones'])
+        ->middleware(['permission:NewSan.correr_notificaciones'])
         ->name('v1.newsan.notifyOrders');
     Route::get('notification-logs/export/{newSanNotificationLog}', [NewSanController::class, 'exportNotificationLog'])
-        ->middleware(['permission:NewSan-descargar_notificaciones'])
+        ->middleware(['permission:NewSan.descargar_notificaciones'])
         ->name('v1.newsan.notification-logs-export');
 });
