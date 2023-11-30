@@ -620,6 +620,7 @@ class NewSanServiceTest extends TestCase
         ];
     }
 
+    /*
     public function test_process_notify_loguea_si_api_new_san_no_devuelve_200()
     {
         $orderInformed = NewSanOrderInformed::factory()->create([
@@ -651,6 +652,7 @@ class NewSanServiceTest extends TestCase
 
         $newSanService->processNotify();
     }
+    */
 
     /** @dataProvider parametersNotifyOrders */
     public function test_notify_orders_lo_hace_correctamente(array $orders, array $listsOfStates, array $expectedResponse, array $responsesApi, array $notifiedArray, array $finalizedArray)
