@@ -16,15 +16,16 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
-        $schedule->job(new NotifyOrdersNewSan())->dailyAt('06:00'); // A las 06:00 todos los días
-        $schedule->job(new NotifyOrdersNewSan())->dailyAt('12:00'); // A las 12:00 todos los días
-        $schedule->job(new NotifyOrdersNewSan())->dailyAt('18:00'); // A las 18:00 todos los días
-        $schedule->job(new NotifyOrdersNewSan())->dailyAt('00:00'); // A las 12:30 todos los días
+        if (app()->environment('production') || app()->environment('staging')) {
+            $schedule->job(new NotifyOrdersNewSan())->dailyAt('06:00');
+            $schedule->job(new NotifyOrdersNewSan())->dailyAt('12:00');
+            $schedule->job(new NotifyOrdersNewSan())->dailyAt('18:00');
+            $schedule->job(new NotifyOrdersNewSan())->dailyAt('00:00');
 
-        $schedule->call(function () {
-            DB::table('api_logs')->delete();
-        })->monthlyOn(1, '00:00'); // A las 00:00 del primer dia de cada mes
+            $schedule->call(function () {
+                DB::table('api_logs')->delete();
+            })->monthlyOn(1, '00:00'); // A las 00:00 del primer dia de cada mes
+        }
     }
 
     /**
